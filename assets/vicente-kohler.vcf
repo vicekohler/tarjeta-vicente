@@ -1,0 +1,11 @@
+BEGIN:VCARD
+VERSION:3.0
+FN:Vicente Köhler
+N:Köhler;Vicente;;;
+EMAIL;TYPE=INTERNET;TYPE=HOME:vicente.kohler@gmail.com
+EMAIL;TYPE=INTERNET;TYPE=WORK:vkohler@alumnos.uai.cl
+TEL;TYPE=CELL:+56 9 8915 9883
+ADR;TYPE=HOME:;;Santiago;;;;
+URL;TYPE=WORK:https://www.linkedin.com/in/vicente-köhler-merino-1a17bb230/
+URL;TYPE=WORK:https://github.com/vicekohler
+END:VCARD
