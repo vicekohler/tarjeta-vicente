@@ -66,7 +66,7 @@ button { font: inherit; color: inherit; }
 /* Perfil */
 .perfil { text-align: center; padding: 22px 0 6px; }
 h1 {
-  margin: 0; font: italic 900 46px/.92 var(--f); text-transform: uppercase; letter-spacing: -.01em;
+  margin: 0; font: italic 900 46px/1.06 var(--f); text-transform: uppercase; letter-spacing: -.01em;
 }
 .carrera { margin: 10px 0 0; font-weight: 600; color: var(--gris); font-size: 14px; }
 .busco {
