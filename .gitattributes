@@ -1,0 +1,4 @@
+*.vcf text eol=crlf
+*.pdf binary
+*.jpeg binary
+*.png binary

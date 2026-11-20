@@ -1,55 +1,135 @@
-const LANGUAGES = {
-  es: {
-    name: "Vicente Köhler",
-    degree: "Ing. Civil Industrial / Ing. Civil Informático - UAI",
-    bio: "Estudiante de doble titulación en Ingeniería Civil Industrial e Ingeniería Civil Informática en la UAI, con fuerte interés en consultoría tecnológica, desarrollo web y análisis de datos. Me destaco por mi adaptabilidad, pensamiento crítico y motivación por resolver problemas reales con impacto.",
-    quote: "\"No busco respuestas fáciles, busco las correctas.\"",
-    cv_es: "CV en Español",
-    cv_en: "CV en Inglés",
-    contact: "Guardar contacto",
-    location: "Santiago, Chile"
-  },
-  en: {
-    name: "Vicente Köhler",
-    degree: "Industrial and Computer Science Engineering Student - UAI",
-    bio: "Double-degree student in Industrial and Computer Science Engineering at UAI, with a strong interest in tech consulting, web development, and data analysis. I stand out for my adaptability, critical thinking, and drive to solve real-world impactful problems.",
-    quote: "\"I don't seek easy answers, I seek the right ones.\"",
-    cv_es: "CV in Spanish",
-    cv_en: "CV in English",
-    contact: "Save contact",
-    location: "Santiago, Chile"
+// Idioma, tema y copiar. Sin dependencias externas. El español está escrito en el HTML
+// (así la página se lee completa aunque este archivo no cargue); aquí solo va el inglés.
+(function () {
+  "use strict";
+
+  var EN = {
+    carrera: "Industrial Engineering + Computer Science Engineering · UAI",
+    busco: "Looking for a 2027 internship · operations, data or technology",
+    guardar: "Save contact",
+    cv_es: "CV ES",
+    cv_en: "CV EN",
+    t_sobre: "About me",
+    sobre: "Bachelor of Engineering Sciences (UAI), in the final semester of a double degree in Industrial and Computer Science Engineering. I like connecting processes and technology: understanding how an operation works and building the tool that improves it.",
+    t_proyectos: "Projects",
+    p1_meta: "Startup · 2026",
+    p1: "SaaS platform that centralizes a company's software licenses, detects redundancies and helps cut spending.",
+    p2_meta: "Personal project · 2026",
+    p2_titulo: "AI agent system",
+    p2: "Agents that sort my email, schedule deadlines and prepare drafts, with their own security layer and a Python desktop app.",
+    p3_meta: "Academic project · 2026",
+    p3_titulo: "Price monitor",
+    p3: "Scraping and price analysis for pharmacies and supermarkets in Chile; the MVP processed the full catalog of 3 pharmacies.",
+    p4_meta: "Consulting · 2025",
+    p4_titulo: "Odoo ERP implementation",
+    p4: "Migration strategy for inventory, logistics and financial control; requirements with 8 stakeholders and 4 process improvements.",
+    t_habilidades: "Skills",
+    h1: "Operations",
+    h2: "Supply chain",
+    h3: "Data analysis",
+    h4: "Project evaluation",
+    h5: "English B2",
+    t_contacto: "Contact",
+    copiar: "Copy",
+    abrir: "Open",
+    frase: "\"I don't look for easy answers, I look for the right ones.\"",
+    copiado: "Copied",
+    no_copiado: "Couldn't copy: select it by hand",
+    tema: "Change theme"
+  };
+  var ES_EXTRA = { copiado: "Copiado", no_copiado: "No se pudo copiar: selecciónalo a mano", tema: "Cambiar tema" };
+
+  // localStorage puede no existir o lanzar error (Safari privado, cookies bloqueadas).
+  function leer(clave) { try { return window.localStorage.getItem(clave); } catch (e) { return null; } }
+  function guardar(clave, valor) { try { window.localStorage.setItem(clave, valor); } catch (e) { /* sin memoria, no pasa nada */ } }
+
+  var nodos = Array.prototype.slice.call(document.querySelectorAll("[data-t]"));
+  var ES = {};
+  nodos.forEach(function (n) { ES[n.getAttribute("data-t")] = n.textContent; });
+  Object.keys(ES_EXTRA).forEach(function (k) { ES[k] = ES_EXTRA[k]; });
+  var idioma = "es";
+
+  function texto(clave) { return (idioma === "en" ? EN : ES)[clave] || ES[clave] || ""; }
+
+  function ponerIdioma(nuevo) {
+    idioma = nuevo === "en" ? "en" : "es";
+    document.documentElement.lang = idioma;
+    nodos.forEach(function (n) {
+      var t = texto(n.getAttribute("data-t"));
+      if (t) n.textContent = t;
+    });
+    document.querySelectorAll("[data-idioma]").forEach(function (b) {
+      b.setAttribute("aria-pressed", String(b.getAttribute("data-idioma") === idioma));
+    });
+    var tema = document.getElementById("tema");
+    if (tema) tema.setAttribute("aria-label", texto("tema"));
   }
-};
 
-function cambiarIdioma(lang) {
-  localStorage.setItem('lang', lang);
-  document.documentElement.lang = lang;
+  document.querySelectorAll("[data-idioma]").forEach(function (b) {
+    b.addEventListener("click", function () {
+      ponerIdioma(b.getAttribute("data-idioma"));
+      guardar("idioma", idioma);
+    });
+  });
+  var navegador = (navigator.language || "es").toLowerCase();
+  ponerIdioma(leer("idioma") || (navegador.indexOf("es") === 0 ? "es" : "en"));
 
-  const dict = LANGUAGES[lang];
-  document.querySelectorAll('[data-lang="name"]').forEach(el => el.textContent = dict.name);
-  document.querySelectorAll('[data-lang="degree"]').forEach(el => el.textContent = dict.degree);
-  document.querySelectorAll('[data-lang="bio"]').forEach(el => el.textContent = dict.bio);
-  document.querySelectorAll('[data-lang="quote"]').forEach(el => el.textContent = dict.quote);
-  document.querySelectorAll('[data-lang="cv_es"]').forEach(el => el.textContent = dict.cv_es);
-  document.querySelectorAll('[data-lang="cv_en"]').forEach(el => el.textContent = dict.cv_en);
-  document.querySelectorAll('[data-lang="contact"]').forEach(el => el.textContent = dict.contact);
-  document.querySelectorAll('[data-lang="location"]').forEach(el => el.textContent = dict.location);
-}
+  // Tema: sigue al sistema hasta que la persona elige; después recuerda la elección.
+  var raiz = document.documentElement;
+  var temaGuardado = leer("tema");
+  if (temaGuardado === "claro" || temaGuardado === "oscuro") raiz.setAttribute("data-tema", temaGuardado);
+  function temaActual() {
+    var fijo = raiz.getAttribute("data-tema");
+    if (fijo) return fijo;
+    return window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "oscuro" : "claro";
+  }
+  function pintarColorBarra() {
+    var meta = document.querySelector('meta[name="theme-color"]');
+    if (meta) meta.setAttribute("content", temaActual() === "oscuro" ? "#121110" : "#f4eee3");
+  }
+  pintarColorBarra();
+  var botonTema = document.getElementById("tema");
+  if (botonTema) botonTema.addEventListener("click", function () {
+    var nuevo = temaActual() === "oscuro" ? "claro" : "oscuro";
+    raiz.setAttribute("data-tema", nuevo);
+    guardar("tema", nuevo);
+    pintarColorBarra();
+  });
 
-window.addEventListener('DOMContentLoaded', () => {
-  const savedLang = localStorage.getItem('lang') || 'es';
-  cambiarIdioma(savedLang);
-
-  document.querySelectorAll('.lang-flag').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const lang = btn.dataset.lang;
-      cambiarIdioma(lang);
-
-      // Actualiza el ícono de la bandera
-      const flag = document.getElementById('currentFlag');
-      if (flag) {
-        flag.src = lang === 'es' ? 'assets/es.png' : 'assets/gb.png';
+  // Copiar con respaldo para navegadores sin portapapeles moderno.
+  var aviso = document.getElementById("aviso");
+  var temporizador = null;
+  function avisar(mensaje) {
+    if (!aviso) return;
+    aviso.textContent = mensaje;
+    aviso.classList.add("visible");
+    clearTimeout(temporizador);
+    temporizador = setTimeout(function () { aviso.classList.remove("visible"); }, 1600);
+  }
+  function copiarRespaldo(valor) {
+    var area = document.createElement("textarea");
+    area.value = valor;
+    area.setAttribute("readonly", "");
+    area.style.position = "fixed";
+    area.style.opacity = "0";
+    document.body.appendChild(area);
+    area.select();
+    var ok = false;
+    try { ok = document.execCommand("copy"); } catch (e) { ok = false; }
+    document.body.removeChild(area);
+    return ok;
+  }
+  document.querySelectorAll("button[data-copiar]").forEach(function (b) {
+    b.addEventListener("click", function () {
+      var valor = b.getAttribute("data-copiar");
+      if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(valor).then(
+          function () { avisar(texto("copiado")); },
+          function () { avisar(copiarRespaldo(valor) ? texto("copiado") : texto("no_copiado")); }
+        );
+      } else {
+        avisar(copiarRespaldo(valor) ? texto("copiado") : texto("no_copiado"));
       }
     });
   });
-});
+})();

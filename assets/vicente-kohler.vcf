@@ -1,11 +1,15 @@
 BEGIN:VCARD
 VERSION:3.0
-FN:Vicente Köhler
-N:Köhler;Vicente;;;
-EMAIL;TYPE=INTERNET;TYPE=HOME:vicente.kohler@gmail.com
-EMAIL;TYPE=INTERNET;TYPE=WORK:vkohler@alumnos.uai.cl
-TEL;TYPE=CELL:+56 9 8915 9883
-ADR;TYPE=HOME:;;Santiago;;;;
-URL;TYPE=WORK:https://www.linkedin.com/in/vicente-köhler-merino-1a17bb230/
+FN;CHARSET=UTF-8:Vicente Köhler
+N;CHARSET=UTF-8:Köhler;Vicente;;;
+TITLE;CHARSET=UTF-8:Ing. Civil Industrial e Ing. Civil Informática
+ORG;CHARSET=UTF-8:Universidad Adolfo Ibáñez
+EMAIL;TYPE=INTERNET,HOME:vicente.kohler@gmail.com
+EMAIL;TYPE=INTERNET,WORK:vkohler@alumnos.uai.cl
+TEL;TYPE=CELL:+56989159883
+ADR;TYPE=HOME;CHARSET=UTF-8:;;;Santiago;;;Chile
+URL:https://vicekohler.github.io/tarjeta-vicente/
+URL;TYPE=WORK:https://www.linkedin.com/in/vicente-k%C3%B6hler-merino-1a17bb230/
 URL;TYPE=WORK:https://github.com/vicekohler
+NOTE;CHARSET=UTF-8:Busco práctica profesional 2027 en operaciones\, datos o tecnología.
 END:VCARD
