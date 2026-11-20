@@ -35,9 +35,11 @@
     frase: "\"I don't look for easy answers, I look for the right ones.\"",
     copiado: "Copied",
     no_copiado: "Couldn't copy: select it by hand",
-    tema: "Change theme"
+    tema: "Change theme",
+    compartir: "Share card",
+    enlace_copiado: "Link copied"
   };
-  var ES_EXTRA = { copiado: "Copiado", no_copiado: "No se pudo copiar: selecciónalo a mano", tema: "Cambiar tema" };
+  var ES_EXTRA = { copiado: "Copiado", no_copiado: "No se pudo copiar: selecciónalo a mano", tema: "Cambiar tema", compartir: "Compartir tarjeta", enlace_copiado: "Enlace copiado" };
 
   // localStorage puede no existir o lanzar error (Safari privado, cookies bloqueadas).
   function leer(clave) { try { return window.localStorage.getItem(clave); } catch (e) { return null; } }
@@ -63,6 +65,8 @@
     });
     var tema = document.getElementById("tema");
     if (tema) tema.setAttribute("aria-label", texto("tema"));
+    var comp = document.getElementById("compartir");
+    if (comp) comp.setAttribute("aria-label", texto("compartir"));
   }
 
   document.querySelectorAll("[data-idioma]").forEach(function (b) {
@@ -119,6 +123,25 @@
     document.body.removeChild(area);
     return ok;
   }
+  // Compartir: menú nativo del celular; si no existe, copia el enlace.
+  var URL_TARJETA = "https://vicekohler.github.io/tarjeta-vicente/";
+  var botonCompartir = document.getElementById("compartir");
+  if (botonCompartir) botonCompartir.addEventListener("click", function () {
+    var datos = { title: "Vicente Köhler", text: texto("busco"), url: URL_TARJETA };
+    if (navigator.share) {
+      navigator.share(datos).catch(function () { /* la persona cerró el menú */ });
+      return;
+    }
+    if (navigator.clipboard && window.isSecureContext) {
+      navigator.clipboard.writeText(URL_TARJETA).then(
+        function () { avisar(texto("enlace_copiado")); },
+        function () { avisar(copiarRespaldo(URL_TARJETA) ? texto("enlace_copiado") : texto("no_copiado")); }
+      );
+    } else {
+      avisar(copiarRespaldo(URL_TARJETA) ? texto("enlace_copiado") : texto("no_copiado"));
+    }
+  });
+
   document.querySelectorAll("button[data-copiar]").forEach(function (b) {
     b.addEventListener("click", function () {
       var valor = b.getAttribute("data-copiar");
