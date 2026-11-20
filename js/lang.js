@@ -78,14 +78,12 @@
   var navegador = (navigator.language || "es").toLowerCase();
   ponerIdioma(leer("idioma") || (navegador.indexOf("es") === 0 ? "es" : "en"));
 
-  // Tema: sigue al sistema hasta que la persona elige; después recuerda la elección.
+  // Tema: claro por defecto; si la persona elige oscuro, se recuerda.
   var raiz = document.documentElement;
   var temaGuardado = leer("tema");
   if (temaGuardado === "claro" || temaGuardado === "oscuro") raiz.setAttribute("data-tema", temaGuardado);
   function temaActual() {
-    var fijo = raiz.getAttribute("data-tema");
-    if (fijo) return fijo;
-    return window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "oscuro" : "claro";
+    return raiz.getAttribute("data-tema") === "oscuro" ? "oscuro" : "claro";
   }
   function pintarColorBarra() {
     var meta = document.querySelector('meta[name="theme-color"]');

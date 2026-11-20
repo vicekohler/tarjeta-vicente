@@ -11,12 +11,7 @@
   --f-dato: "JetBrains Mono", ui-monospace, Consolas, monospace;
   color-scheme: light;
 }
-@media (prefers-color-scheme: dark) {
-  :root:not([data-tema="claro"]) {
-    --fondo: #121110; --papel: #1c1a18; --tinta: #f4eee3; --gris: #a69f93; --gris-claro: #3a3631;
-    color-scheme: dark;
-  }
-}
+/* Claro por defecto; el oscuro solo si la persona lo elige con el botón. */
 :root[data-tema="oscuro"] {
   --fondo: #121110; --papel: #1c1a18; --tinta: #f4eee3; --gris: #a69f93; --gris-claro: #3a3631;
   color-scheme: dark;
